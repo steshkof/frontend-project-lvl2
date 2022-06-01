@@ -1,11 +1,5 @@
-import fs from 'fs';
-import path from 'path';
 import _ from 'lodash';
-
-const parseFile = (file) => {
-  const absolutePath = path.resolve(process.cwd(), file);
-  return JSON.parse(fs.readFileSync(absolutePath, 'utf-8'));
-};
+import { parseFile } from './parseFile.js';
 
 const genDiff = (file1, file2) => {
   const parsedFile1 = parseFile(file1);
@@ -27,7 +21,7 @@ const genDiff = (file1, file2) => {
 
     // есть в обоих, значения равны
     if (keyInFile1 && keyInFile2 && value1 === value2) {
-      diffResult += `  ${key}: ${value1}\n`;
+      diffResult += `    ${key}: ${value1}\n`;
     }
     // есть в обоих, значения разные
     if (keyInFile1 && keyInFile2 && value1 !== value2) {
