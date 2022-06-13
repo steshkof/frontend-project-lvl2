@@ -14,3 +14,6 @@ test:
 
 test-coverage:  
 	NODE_OPTIONS=--experimental-vm-modules npx jest --coverage
+
+start:
+	gendiff __fixtures__/file1.json __fixtures__/file2.json

@@ -8,3 +8,7 @@
 
 ### Comparison of json/yaml files and test
 [![asciicast](https://asciinema.org/a/GmZriYdZymzeo0d87MRYWIKwn.svg)](https://asciinema.org/a/GmZriYdZymzeo0d87MRYWIKwn)
+
+
+### Comparison of json/yaml stylish format
+[![asciicast](https://asciinema.org/a/bScpBqZ7fr6UwTciNfKTjZaDA.svg)](https://asciinema.org/a/bScpBqZ7fr6UwTciNfKTjZaDA)

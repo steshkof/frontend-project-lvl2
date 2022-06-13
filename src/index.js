@@ -1,82 +1,127 @@
 import _ from 'lodash';
 import { parseFile } from './parsers.js';
+import runWithFormatter from './formatters/index.js';
 
-/* eslint-disable */
-const genDiff = (file1, file2) => {
-  const parsedFile1 = parseFile(file1);
-  const parsedFile2 = parseFile(file2);
+/*eslint-disable*/
+const genDiff = (filepath1, filepath2, format) => {
+  // получаем контент файлов
+  const fileData1 = parseFile(filepath1);
+  const fileData2 = parseFile(filepath2);
 
+  // проверка, одинаковые ли файлы
+  if (_.isEqual(fileData1, fileData2)) return 'Values are the same';
 
-  const iter = (obj1, obj2, depth) => {
+  const iter = (file1, file2) => {
+    // если одинаковые, можно не сравнивать, вернуть первый
+    if (_.isEqual(file1, file2)) return file1;
+
     // Берем ключи, осталяем уникальные, сортируем по алфавиту
-    const keysOfObj1 = Object.keys(obj1);
-    const keysOfobj2 = Object.keys(obj2);
+    const keysOfObj1 = Object.keys(file1);
+    const keysOfobj2 = Object.keys(file2);
     const allKeys = _.sortBy(_.uniq([...keysOfObj1, ...keysOfobj2]));
-    
-    const indent = '    '.repeat(depth); // отступ в 4 пробела
-    const bracketIndent = '    '.repeat(depth - 1);
-    
-    // проходим по ключам
-    const lines = allKeys.map((key) => {
-      const keyInFile1 = Object.hasOwn(obj1, key);
-      const keyInFile2 = Object.hasOwn(obj2, key);
 
-      const value1 = obj1[key];
-      const value2 = obj2[key];
+    // проходим по ключам и создаем дерево
+    const makeTree = allKeys.flatMap((key) => {
+      const makeBranch = (uniqKey) => {
+        // проверяем, если ключи в файлах
+        const keyInFile1 = Object.hasOwn(file1, uniqKey);
+        const keyInFile2 = Object.hasOwn(file2, uniqKey);
 
-      // Если есть ключ только во втором, возвращаем с плюсом
-      if (!keyInFile1 && keyInFile2) {
-        if (_.isObject(value2)) {
-          return `${indent.slice(0,-2)}+ ${key}: ${iter(value2, value2, depth + 1)}`;
-        }
-        return `${indent.slice(0,-2)}+ ${key}: ${value2}`;
-      }
+        // получаем значения ключей
+        const value1 = file1[key];
+        const value2 = file2[key];
 
-      // Если есть ключ только во первом, возвращаем с минусом
-      if (keyInFile1 && !keyInFile2) {
-        if (_.isObject(value1)) {
-          return `${indent.slice(0,-2)}- ${key}: ${iter(value1, value1, depth + 1)}`;
-        }
-        return `${indent.slice(0,-2)}- ${key}: ${value1}`;
-      }
-
-      // если есть в обоих и значения равны
-      if (keyInFile1 && keyInFile2 && _.isEqual(value1, value2)) {
-        if (_.isObject(value1)) {
-          return `${indent}${key}: ${iter(value1, value1, depth + 1)}`
-        }
-        return `${indent}${key}: ${value1}`
-      }
-
-      // если есть в обоих и значения разные
-      if (keyInFile1 && keyInFile2 && !_.isEqual(value1, value2)) {
-        if (_.isObject(value1) && _.isObject(value2)) {
-          return `${indent}${key}: ${iter(value1, value2, depth + 1)}`
+        // есть ключ только в первом
+        if (keyInFile1 && !keyInFile2) {
+          return {
+            node: {[uniqKey]: value1,},sign: '-',
+          };
         }
 
-        if (_.isObject(value1) && !_.isObject(value2)) {
-          return `${indent.slice(0,-2)}- ${key}: ${iter(value1, value1, depth + 1)}\n${indent.slice(0,-2)}+ ${key}: ${value2}`
-        }
-        
-        if (!_.isObject(value1) && _.isObject(value2)) {
-          return `${indent.slice(0,-2)}- ${key}: ${value1}\n${indent.slice(0,-2)}+ ${key}: ${iter(value1, value1, depth + 1)}`
+        // есть ключ только во втором
+        if (keyInFile2 && !keyInFile1) {
+          return {
+            node: {[uniqKey]: value2,},sign: '+',
+          };
         }
 
-        return `${indent.slice(0,-2)}- ${key}: ${value1}\n${indent.slice(0,-2)}+ ${key}: ${value2}`
-      }
-    })
+        // если есть в обоих, значения разные и один - не объект
+        if ((!_.isObject(value1) || !_.isObject(value2)) && !_.isEqual(value1, value2)) {
+          return [
+            { node: { [uniqKey]: value1 }, sign: '-' },
+            { node: { [uniqKey]: value2 }, sign: '+' },
+          ];
+        }
 
-    return [
-      '{',
-      ...lines,
-      `${bracketIndent}}`,
-    ].join('\n');    
-  }
-  return iter(parsedFile1, parsedFile2, 1);
+        // есть в обоих, оба значения - объекты => без знака и запускаем iter для сравнения значений
+        return {
+          node: {
+            [uniqKey]: iter(value1, value2),
+          },
+          sign: ' ',
+        };
+      };
+      return makeBranch(key);
+    });
+    return makeTree;
+  };
+  const diffTree = iter(fileData1, fileData2);
+  return runWithFormatter(diffTree, format);
 };
 
 export { genDiff };
 
-
-
-
+// [
+//   {
+//     node: {
+//       common: [
+//         { node: { follow: false }, sign: '+' },
+//         { node: { setting1: 'Value 1' }, sign: ' ' },
+//         { node: { setting2: 200 }, sign: '-' },
+//         { node: { setting3: true }, sign: '-' },
+//         { node: { setting3: null }, sign: '+' },
+//         { node: { setting4: 'blah blah' }, sign: '+' },
+//         { node: { setting5: { key5: 'value5' } }, sign: '+' },
+//         {
+//           node: {
+//             setting6: [
+//               {
+//                 node: {
+//                   doge: [
+//                     { node: { wow: '' }, sign: '-' },
+//                     { 
+//                       node: { wow: 'so much' }, 
+//                       sign: '+' 
+//                     },
+//                   ],
+//                 },
+//                 sign: ' ',
+//               },
+//               { node: { key: 'value' }, sign: ' ' },
+//               { node: { ops: 'vops' }, sign: '+' },
+//             ],
+//           },
+//           sign: ' ',
+//         },
+//       ],
+//     },
+//     sign: ' ',
+//   },
+//   {
+//     node: {
+//       group1: [
+//         { node: { baz: 'bas' }, sign: '-' },
+//         { node: { baz: 'bars' }, sign: '+' },
+//         { node: { foo: 'bar' }, sign: ' ' },
+//         { node: { nest: { key: 'value' } }, sign: '-' },
+//         { node: { nest: 'str' }, sign: '+' },
+//       ],
+//     },
+//     sign: ' ',
+//   },
+//   { node: { group2: { abc: 12345, deep: { id: 45 } } }, sign: '-' },
+//   {
+//     node: { group3: { deep: { id: { number: 45 } }, fee: 100500 } },
+//     sign: '+',
+//   },
+// ];
