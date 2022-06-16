@@ -12,3 +12,6 @@
 
 ### Comparison of json/yaml plain format
 [![asciicast](https://asciinema.org/a/502150.svg)](https://asciinema.org/a/502150)
+
+### Comparison of json/yaml json format
+[![asciicast](https://asciinema.org/a/502167.svg)](https://asciinema.org/a/502167)
