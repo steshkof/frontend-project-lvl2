@@ -3,6 +3,7 @@ import { test, expect } from '@jest/globals';
 import { genDiff } from '../src/index.js';
 import { getFixturePath } from '../src/getPath.js';
 
+// stylish
 test('test of genDiff JSON, stylish format', () => {
   const fileName1 = 'file1.json';
   const fileName2 = 'file2.json';
@@ -19,10 +20,36 @@ test('test of genDiff YAML, stylish format', () => {
   expect(genDiff(getFixturePath(fileName1), getFixturePath(fileName2), 'stylish')).toEqual(expected);
 });
 
+// plain
+test('test of genDiff JSON, plain format', () => {
+  const fileName1 = 'file1.json';
+  const fileName2 = 'file2.json';
+
+  const expected = readFileSync(getFixturePath('expected_plain.txt'), 'utf-8');
+  expect(genDiff(getFixturePath(fileName1), getFixturePath(fileName2), 'plain')).toEqual(expected);
+});
+
+test('test of genDiff YAML, plain format', () => {
+  const fileName1 = 'file1.yaml';
+  const fileName2 = 'file2.yaml';
+
+  const expected = readFileSync(getFixturePath('expected_plain.txt'), 'utf-8');
+  expect(genDiff(getFixturePath(fileName1), getFixturePath(fileName2), 'plain')).toEqual(expected);
+});
+
+// equal
 test('test of equal files, stylish format', () => {
   const fileName1 = 'file1.json';
   const fileName2 = 'file1.json';
 
   const expected = 'Values are the same';
   expect(genDiff(getFixturePath(fileName1), getFixturePath(fileName2), 'stylish')).toEqual(expected);
+});
+
+test('test of equal files, plain format', () => {
+  const fileName1 = 'file1.json';
+  const fileName2 = 'file1.json';
+
+  const expected = 'Values are the same';
+  expect(genDiff(getFixturePath(fileName1), getFixturePath(fileName2), 'plain')).toEqual(expected);
 });
