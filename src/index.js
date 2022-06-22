@@ -17,8 +17,8 @@ const genDiff = (filepath1, filepath2, format) => {
 
     const makeTree = allKeys.flatMap((key) => {
       const makeBranch = (uniqKey) => {
-        const keyInFile1 = Object.hasOwn(file1, uniqKey);
-        const keyInFile2 = Object.hasOwn(file2, uniqKey);
+        const keyInFile1 = _.has(file1, uniqKey);
+        const keyInFile2 = _.has(file2, uniqKey);
 
         const value1 = file1[key];
         const value2 = file2[key];
