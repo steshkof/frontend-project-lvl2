@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { test, expect } from '@jest/globals';
-import { genDiff } from '../src/index.js';
+import genDiff from '../src/index.js';
 import { getFixturePath } from '../src/getPath.js';
 
 const jsonFile1 = getFixturePath('file1.json');

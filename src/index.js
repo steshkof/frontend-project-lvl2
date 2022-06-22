@@ -57,4 +57,4 @@ const genDiff = (filepath1, filepath2, format) => {
   return runWithFormatter(diffTree, format);
 };
 
-export { genDiff };
+export default genDiff;
