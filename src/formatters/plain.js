@@ -64,7 +64,7 @@ const formatterPlain = (input) => {
               // значение изменено
               if (_branchSign === '+' && !_currentKeyIsUniq) {
                 const [value1, value2] = branchesData
-                  .filter((current) => Object.hasOwn(current, key))
+                  .filter((current) => _.has(current, key))
                   .map((current) => current[key]);
 
                 return renderString(rootToPrint, 'updated', value1, value2);
