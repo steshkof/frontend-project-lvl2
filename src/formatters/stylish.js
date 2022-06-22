@@ -16,9 +16,9 @@ const formatterStylish = (input) => {
     if (!_.isObject(tree)) return `${tree}`;
 
     // если значение - объект/массив
-    let lines = [tree].flat(); // может прийти массив объектов или 1 объект, делаем из него массив
+    const lines = [tree].flat(); // может прийти массив объектов или 1 объект, делаем из него массив
 
-    lines = lines.reduce((acc, current) => {
+    const linesSet = lines.reduce((acc, current) => {
       // возвращаем массив с элементами и присваиваем значения node и sign
       const [node, sign = ' '] = _.isArray(tree) ? Object.keys(current).map((key) => current[key]) : [current];
 
@@ -33,10 +33,10 @@ const formatterStylish = (input) => {
     }, []);
 
     // добавляем фигурные скобки в начале и конце
-    return ['{', ...lines, `${bracketIndent(_depth)}}`].join('\n');
+    return ['{', ...linesSet, `${bracketIndent(_depth)}}`].join('\n');
   };
 
   return buildTree(input, depth);
 };
 
-export { formatterStylish };
+export default formatterStylish;

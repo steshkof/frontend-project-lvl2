@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { parseFile } from './parsers.js';
+import parseFile from './parsers.js';
 import runWithFormatter from './formatters/index.js';
 
 const genDiff = (filepath1, filepath2, format) => {

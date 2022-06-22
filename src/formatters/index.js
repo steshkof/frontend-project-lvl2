@@ -1,6 +1,6 @@
-import { formatterStylish } from './stylish.js';
-import { formatterPlain } from './plain.js';
-import { formatterJson } from './json.js';
+import formatterStylish from './stylish.js';
+import formatterPlain from './plain.js';
+import formatterJson from './json.js';
 
 export default (tree, format) => {
   switch (format) {

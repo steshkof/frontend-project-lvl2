@@ -15,4 +15,4 @@ const parseFile = (file) => {
   return 'Unrecognized file extension';
 };
 
-export { parseFile };
+export default parseFile;

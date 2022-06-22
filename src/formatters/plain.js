@@ -90,4 +90,4 @@ const formatterPlain = (input) => {
   return plainComparison(input);
 };
 
-export { formatterPlain };
+export default formatterPlain;

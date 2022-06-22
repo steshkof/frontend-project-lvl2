@@ -1,2 +1,2 @@
 const formatterJson = (input) => JSON.stringify(input);
-export { formatterJson };
+export default formatterJson;
