@@ -4,6 +4,7 @@
 
 
 **Установка** ```$ npm ci```
+
 **Вызов справки** ```$ gendiff --help```
 
 ### Hexlet tests,linter, my tests and codeclimate status:
