@@ -1,3 +1,11 @@
+# Frontend Project #2
+
+Утилита ```gendiff``` позволяет сравнивать содержание файлов в форматах json и yml и выводить результат сравнения в разных форматах: plain text, pretty и json 
+
+
+**Установка** ```$ npm ci```
+**Вызов справки** ```$ gendiff --help```
+
 ### Hexlet tests,linter, my tests and codeclimate status:
 [![Actions Status](https://github.com/steshkof/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/steshkof/frontend-project-lvl2/actions) [![eslint](https://github.com/steshkof/frontend-project-lvl2/actions/workflows/eslint.yml/badge.svg?event=push)](https://github.com/steshkof/frontend-project-lvl2/actions/workflows/eslint.yml) [![My tests](https://github.com/steshkof/frontend-project-lvl2/actions/workflows/tests.yml/badge.svg?event=push)](https://github.com/steshkof/frontend-project-lvl2/actions/workflows/tests.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://github.com/steshkof/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://github.com/steshkof/frontend-project-lvl2/test_coverage)
 
