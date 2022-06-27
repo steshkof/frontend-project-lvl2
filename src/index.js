@@ -1,10 +1,14 @@
 import _ from 'lodash';
 import parseFile from './parsers.js';
 import runWithFormatter from './formatters/index.js';
+import { getAbsolutePath } from './getPath.js';
 
 const genDiff = (filepath1, filepath2, format) => {
-  const fileData1 = parseFile(filepath1);
-  const fileData2 = parseFile(filepath2);
+  const absolutePath1 = getAbsolutePath(filepath1);
+  const absolutePath2 = getAbsolutePath(filepath2);
+
+  const fileData1 = parseFile(absolutePath1);
+  const fileData2 = parseFile(absolutePath2);
 
   if (_.isEqual(fileData1, fileData2)) return 'Values are the same';
 
