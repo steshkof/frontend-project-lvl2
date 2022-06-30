@@ -12,7 +12,7 @@ const formatterStylish = (input) => {
     if (!_.isObject(tree)) return `${tree}`;
 
     const lines = [tree].flat();
-    const linesSet = lines.reduce((acc, current) => {
+    const linesFromattedStylish = lines.reduce((acc, current) => {
       const [node, sign = ' '] = _.isArray(tree) ? Object.keys(current).map((key) => current[key]) : [current];
 
       const lineToAdd = Object.entries(node).map(([key, value]) => {
@@ -23,7 +23,7 @@ const formatterStylish = (input) => {
       return [...acc, ...lineToAdd];
     }, []);
 
-    return ['{', ...linesSet, `${bracketIndent(_depth)}}`].join('\n');
+    return ['{', ...linesFromattedStylish, `${bracketIndent(_depth)}}`].join('\n');
   };
 
   return buildTree(input, depth);
