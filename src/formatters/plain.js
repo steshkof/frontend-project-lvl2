@@ -25,13 +25,14 @@ const formatterPlain = (input) => {
   };
 
   const plainComparison = (tree, root = []) => {
+    if (!_.isArray(tree)) return '';
     const branchesData = tree.map((branch) => branch.node);
 
     const keys = branchesData.map((branch) => Object.keys(branch)).flat();
     const branches = tree
       .map((branch) => {
         const branchData = branch.node;
-        const branchSign = branch.sign;
+        const branchChanged = branch.changes ?? 'unchanged';
 
         const leafs = Object.entries(branchData)
           .map(([key, value]) => {
@@ -40,12 +41,12 @@ const formatterPlain = (input) => {
 
             const currentKeyIsUniq = keys.filter((el) => el === key).length === 1;
 
-            const stringToRender = (_branchSign, _currentKeyIsUniq) => {
-              if (_branchSign === '+' && _currentKeyIsUniq) return renderString(rootToPrint, 'added', value);
+            const stringToRender = (_branchChanged, _currentKeyIsUniq) => {
+              if (_branchChanged === 'added' && _currentKeyIsUniq) return renderString(rootToPrint, 'added', value);
 
-              if (_branchSign === '-' && _currentKeyIsUniq) return renderString(rootToPrint, 'removed');
+              if (_branchChanged === 'removed' && _currentKeyIsUniq) return renderString(rootToPrint, 'removed');
 
-              if (_branchSign === '+' && !_currentKeyIsUniq) {
+              if (_branchChanged === 'added' && !_currentKeyIsUniq) {
                 const [value1, value2] = branchesData
                   .filter((current) => _.has(current, key))
                   .map((current) => current[key]);
@@ -53,11 +54,11 @@ const formatterPlain = (input) => {
                 return renderString(rootToPrint, 'updated', value1, value2);
               }
 
-              if (_branchSign === ' ') return _.isArray(value) ? plainComparison(value, newRoot) : [];
+              if (_branchChanged === 'unchanged') return _.isArray(value) ? plainComparison(value, newRoot) : [];
               return [];
             };
 
-            return stringToRender(branchSign, currentKeyIsUniq);
+            return stringToRender(branchChanged, currentKeyIsUniq);
           })
           .flat();
         return leafs;

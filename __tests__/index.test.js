@@ -1,7 +1,13 @@
+/* eslint object-curly-newline: ["error", "never"] */
 import { readFileSync } from 'fs';
 import { test, expect } from '@jest/globals';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import genDiff from '../src/index.js';
-import { getFixturePath } from '../src/getPath.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
 const jsonFile1 = getFixturePath('file1.json');
 const jsonFile2 = getFixturePath('file2.json');
@@ -11,59 +17,24 @@ const yamlFile2 = getFixturePath('file2.yaml');
 const expectedStylish = readFileSync(getFixturePath('expected_stylish.txt'), 'utf-8');
 const expectedPlain = readFileSync(getFixturePath('expected_plain.txt'), 'utf-8');
 const expectedJson = readFileSync(getFixturePath('expected_json.txt'), 'utf-8');
-const expectedSame = 'Values are the same';
 
-describe('genDiff function', () => {
-  describe('stylish format', () => {
-    test('json files', () => {
-      const result = genDiff(jsonFile1, jsonFile2, 'stylish');
-      expect(result).toEqual(expectedStylish);
-    });
+const expectedSameStylish = readFileSync(getFixturePath('expectedSameStylish.txt'), 'utf-8');
+const expectedSamePlain = readFileSync(getFixturePath('expectedSamePlain.txt'), 'utf-8');
+const expectedSameJson = readFileSync(getFixturePath('expectedSameJson.txt'), 'utf-8');
 
-    test('yaml files', () => {
-      const result = genDiff(yamlFile1, yamlFile2, 'stylish');
-      expect(result).toEqual(expectedStylish);
-    });
-  });
+test.each([
+  { file1: jsonFile1, file2: jsonFile2, expected: expectedStylish, format: 'stylish', description: 'stylish format - json files' },
+  { file1: yamlFile1, file2: yamlFile2, expected: expectedStylish, format: 'stylish', description: 'stylish format - yaml files' },
 
-  describe('plain format', () => {
-    test('json files', () => {
-      const result = genDiff(jsonFile1, jsonFile2, 'plain');
-      expect(result).toEqual(expectedPlain);
-    });
+  { file1: jsonFile1, file2: jsonFile2, expected: expectedPlain, format: 'plain', description: 'plain format - json files' },
+  { file1: yamlFile1, file2: yamlFile2, expected: expectedPlain, format: 'plain', description: 'plain format - yaml files' },
 
-    test('yaml files', () => {
-      const result = genDiff(yamlFile1, yamlFile2, 'plain');
-      expect(result).toEqual(expectedPlain);
-    });
-  });
+  { file1: jsonFile1, file2: jsonFile2, expected: expectedJson, format: 'json', description: 'json format - json files' },
+  { file1: yamlFile1, file2: yamlFile2, expected: expectedJson, format: 'json', description: 'json format - yaml files' },
 
-  describe('json format', () => {
-    test('json files', () => {
-      const result = genDiff(jsonFile1, jsonFile2, 'json');
-      expect(result).toEqual(expectedJson);
-    });
-
-    test('yaml files', () => {
-      const result = genDiff(yamlFile1, yamlFile2, 'json');
-      expect(result).toEqual(expectedJson);
-    });
-  });
-
-  describe('equal files', () => {
-    test('stylish format', () => {
-      const result = genDiff(jsonFile1, jsonFile1, 'stylish');
-      expect(result).toEqual(expectedSame);
-    });
-
-    test('plain format', () => {
-      const result = genDiff(jsonFile1, jsonFile1, 'plain');
-      expect(result).toEqual(expectedSame);
-    });
-
-    test('json format', () => {
-      const result = genDiff(jsonFile1, jsonFile1, 'json');
-      expect(result).toEqual(expectedSame);
-    });
-  });
+  { file1: jsonFile1, file2: jsonFile1, expected: expectedSameStylish, format: 'stylish', description: 'stylish format - same files json' },
+  { file1: jsonFile1, file2: jsonFile1, expected: expectedSamePlain, format: 'plain', description: 'plain format - same files json' },
+  { file1: jsonFile1, file2: jsonFile1, expected: expectedSameJson, format: 'json', description: 'json format - same files json' },
+])('$description', ({ file1, file2, expected, format }) => {
+  expect(genDiff(file1, file2, format)).toEqual(expected);
 });

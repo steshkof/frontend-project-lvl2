@@ -1,22 +1,26 @@
 import _ from 'lodash';
 
 const formatterStylish = (input) => {
-  const depth = 1;
-  const indent = ' ';
-  const indentRepeat = 2;
-
-  const buildTree = (tree, _depth) => {
-    const currentindent = (level) => indent.repeat(indentRepeat * level);
-    const bracketIndent = (level) => indent.repeat((indentRepeat * level) - indentRepeat);
+  const buildTree = (tree, _depth = 1) => {
+    const currentindent = (level) => ' '.repeat((level - 1) * 4 + 2);
+    const bracketIndent = (level) => ' '.repeat((level - 1) * 4);
 
     if (!_.isObject(tree)) return `${tree}`;
 
     const lines = [tree].flat();
     const linesFormattedStylish = lines.reduce((acc, current) => {
-      const [node, sign = ' '] = _.isArray(tree) ? Object.keys(current).map((key) => current[key]) : [current];
+      const [node, changes] = _.isArray(tree)
+        ? Object.keys(current).map((key) => current[key])
+        : [current];
 
+      let sign;
+      switch (changes) {
+        case 'added': sign = '+'; break;
+        case 'removed': sign = '-'; break;
+        default: sign = ' ';
+      }
       const lineToAdd = Object.entries(node).map(([key, value]) => {
-        const currentValue = buildTree(value, _depth + 2);
+        const currentValue = buildTree(value, _depth + 1);
         return `${currentindent(_depth)}${sign} ${key}: ${currentValue}`;
       });
 
@@ -26,7 +30,7 @@ const formatterStylish = (input) => {
     return ['{', ...linesFormattedStylish, `${bracketIndent(_depth)}}`].join('\n');
   };
 
-  return buildTree(input, depth);
+  return buildTree(input);
 };
 
 export default formatterStylish;
