@@ -13,15 +13,15 @@ const formatterStylish = (input) => {
         ? Object.keys(current).map((key) => current[key])
         : [current];
 
-      let sign;
-      switch (changes) {
-        case 'added': sign = '+'; break;
-        case 'removed': sign = '-'; break;
-        default: sign = ' ';
-      }
+      const getSign = () => {
+        if (changes === 'added') return '+';
+        if (changes === 'removed') return '-';
+        return ' ';
+      };
+
       const lineToAdd = Object.entries(node).map(([key, value]) => {
         const currentValue = buildTree(value, _depth + 1);
-        return `${currentindent(_depth)}${sign} ${key}: ${currentValue}`;
+        return `${currentindent(_depth)}${getSign()} ${key}: ${currentValue}`;
       });
 
       return [...acc, ...lineToAdd];

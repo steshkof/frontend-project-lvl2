@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { extname } from 'path';
 import parseFile from './parsers.js';
 import runWithFormatter from './formatters/index.js';
-import { getAbsolutePath } from './getPath.js';
+import getAbsolutePath from './getPath.js';
 import diffTree from './diffTree.js';
 
 const genDiff = (filepath1, filepath2, format) => {

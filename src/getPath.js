@@ -1,4 +1,4 @@
 import path from 'path';
 
 const getAbsolutePath = (filePath) => path.resolve(process.cwd(), filePath);
-export { getAbsolutePath };
+export default getAbsolutePath;
