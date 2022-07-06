@@ -18,14 +18,14 @@ const diffTree = (fileData1, fileData2) => {
       if (keyInFile1 && !keyInFile2) {
         return {
           node: { [uniqKey]: value1 },
-          changes: 'removed',
+          status: 'removed',
         };
       }
 
       if (keyInFile2 && !keyInFile1) {
         return {
           node: { [uniqKey]: value2 },
-          changes: 'added',
+          status: 'added',
         };
       }
 
@@ -33,8 +33,8 @@ const diffTree = (fileData1, fileData2) => {
         (!_.isObject(value1) || !_.isObject(value2)) && !_.isEqual(value1, value2)
       ) {
         return [
-          { node: { [uniqKey]: value1 }, changes: 'removed' },
-          { node: { [uniqKey]: value2 }, changes: 'added' },
+          { node: { [uniqKey]: value1 }, status: 'removed' },
+          { node: { [uniqKey]: value2 }, status: 'added' },
         ];
       }
 
@@ -42,7 +42,7 @@ const diffTree = (fileData1, fileData2) => {
         node: {
           [uniqKey]: diffTree(value1, value2),
         },
-        changes: 'unchanged',
+        status: 'unchanged',
       };
     };
     return makeBranch(key);

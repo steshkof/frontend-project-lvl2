@@ -32,7 +32,7 @@ const formatterPlain = (input) => {
     const branches = tree
       .map((branch) => {
         const branchData = branch.node;
-        const branchChanged = branch.changes ?? 'unchanged';
+        const branchChanged = branch.status ?? 'unchanged';
 
         const leafs = Object.entries(branchData)
           .map(([key, value]) => {

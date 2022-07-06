@@ -9,13 +9,13 @@ const formatterStylish = (input) => {
 
     const lines = [tree].flat();
     const linesFormattedStylish = lines.reduce((acc, current) => {
-      const [node, changes] = _.isArray(tree)
+      const [node, status] = _.isArray(tree)
         ? Object.keys(current).map((key) => current[key])
         : [current];
 
       const getSign = () => {
-        if (changes === 'added') return '+';
-        if (changes === 'removed') return '-';
+        if (status === 'added') return '+';
+        if (status === 'removed') return '-';
         return ' ';
       };
 

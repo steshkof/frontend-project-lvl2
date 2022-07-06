@@ -7,6 +7,6 @@ export default (tree, format = 'stylish') => {
     case 'stylish': return formatterStylish(tree);
     case 'plain': return formatterPlain(tree);
     case 'json': return formatterJson(tree);
-    default: return `Unknown format ${format}`;
+    default: throw new Error(`Unknown format ${format}`);
   }
 };
