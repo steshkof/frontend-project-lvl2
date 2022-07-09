@@ -1,19 +1,19 @@
 import _ from 'lodash';
 
-const diffTree = (fileData1, fileData2) => {
-  if (_.isEqual(fileData1, fileData2)) return fileData1;
+const diffTree = (data1, data2) => {
+  if (_.isEqual(data1, data2)) return data1;
 
-  const keysOfObj1 = Object.keys(fileData1);
-  const keysOfobj2 = Object.keys(fileData2);
+  const keysOfObj1 = Object.keys(data1);
+  const keysOfobj2 = Object.keys(data2);
   const allKeys = _.sortBy(_.uniq([...keysOfObj1, ...keysOfobj2]));
 
   const makeTree = allKeys.flatMap((key) => {
     const makeBranch = (uniqKey) => {
-      const keyInFile1 = _.has(fileData1, uniqKey);
-      const keyInFile2 = _.has(fileData2, uniqKey);
+      const keyInFile1 = _.has(data1, uniqKey);
+      const keyInFile2 = _.has(data2, uniqKey);
 
-      const value1 = fileData1[key];
-      const value2 = fileData2[key];
+      const value1 = data1[key];
+      const value2 = data2[key];
 
       if (keyInFile1 && !keyInFile2) {
         return {
