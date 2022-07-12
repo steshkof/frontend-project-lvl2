@@ -1,24 +1,19 @@
 import { readFileSync } from 'fs';
 import { extname } from 'path';
-import parseFile from './parsers.js';
+import parseData from './parsers.js';
 import runWithFormatter from './formatters/index.js';
 import getAbsolutePath from './getPath.js';
 import diffTree from './diffTree.js';
 
-const genDiff = (filepath1, filepath2, format) => {
-  const absoluteFilePath1 = getAbsolutePath(filepath1);
-  const absoluteFilePath2 = getAbsolutePath(filepath2);
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
+  const getContent = (_filePath) => {
+    const absoluteFilePath = getAbsolutePath(_filePath);
+    const fileExtension = extname(absoluteFilePath).slice(1);
+    const fileContent = readFileSync(absoluteFilePath, 'utf-8');
+    return parseData(fileContent, fileExtension);
+  };
 
-  const file1Extension = extname(absoluteFilePath1);
-  const file2Extension = extname(absoluteFilePath2);
-
-  const file1Content = readFileSync(absoluteFilePath1, 'utf-8');
-  const file2Content = readFileSync(absoluteFilePath2, 'utf-8');
-
-  const file1ParsedContent = parseFile(file1Content, file1Extension);
-  const file2ParsedContent = parseFile(file2Content, file2Extension);
-
-  const generatedDiff = diffTree(file1ParsedContent, file2ParsedContent);
+  const generatedDiff = diffTree(getContent(filepath1), getContent(filepath2));
   return runWithFormatter(generatedDiff, format);
 };
 

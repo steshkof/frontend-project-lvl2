@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
-const formatterStylish = (tree) => {
-  const currentIndent = (depth) => ' '.repeat(depth * 4 - 2);
-  const bracketIndent = (depth) => ' '.repeat(depth * 4 - 4);
+const currentIndent = (depth) => ' '.repeat(depth * 4 - 2);
+const bracketIndent = (depth) => ' '.repeat(depth * 4 - 4);
 
+const formatterStylish = (tree) => {
   const valueFormatter = (data, depth) => {
     if (!_.isObject(data)) return `${data}`;
 
