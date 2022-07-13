@@ -1,4 +1,4 @@
-# Xexlet Frontend Project #2
+# Hexlet Frontend Project #2
 ## Cli Difference Calculator
 
 ---
