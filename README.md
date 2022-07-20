@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Xexlet Frontend Project #2
+=======
+# Xexlet frontend Project #2
+>>>>>>> 71cc83875b1b83cf796e7e0dd1bf3b80445e16b9
 ## Cli Difference Calculator
 
 ---
