@@ -13,7 +13,6 @@
 
 **Help** ```$ gendiff --help```
 
----
 
 ## Usage
 ```gendiff <pathToFile1> <pathToFile2> [options]```  
@@ -24,8 +23,6 @@
 ```-h, --help``` - help information
 ```[type]``` - pretty, plain, json
 ```<pathToFile>``` - path to json or yaml/yml configuration file
-
----
 
 ## Demo
 
